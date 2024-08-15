@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Match3.Core
@@ -13,9 +14,11 @@ namespace Match3.Core
         public void SetTile(Vector2Int boardPosition, PlayTile playTile)
         {
             boardData[boardPosition] = playTile;
+        }
 
-            if (boardPosition == Vector2Int.zero)
-                offset = playTile.transform.position;
+        public void SetOffset()
+        {
+            offset = boardData[Vector2Int.zero].transform.position;
         }
 
         public PlayTile GetTileData(Vector2Int boardPosition)

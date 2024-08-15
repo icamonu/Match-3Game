@@ -19,6 +19,10 @@ namespace Match3.Core
         {
             PlayTile playTile = playTilePool.GetPlayTile();
             boardData.SetTile(inputTile.BoardPosition, playTile);
+
+            if (inputTile.BoardPosition == Vector2Int.one)
+                boardData.SetOffset();
+
             playTile.SetPosition(inputTile.transform.position);
         }
 
@@ -33,16 +37,28 @@ namespace Match3.Core
                 await Flip(tile1, tile2);
             else
             {
-                executionQueue.Enqueue(blaster);
-                HashSet<Vector2Int> dummy = await executionQueue.Dequeue().Execute(blastTileCoordinates);
-
-                executionQueue.Enqueue(columnSorter);
-                HashSet<Vector2Int> dummy2 = await executionQueue.Dequeue().Execute(dummy);
-
-                foreach(var i in dummy2)
+                while (blastTileCoordinates.Count != 0)
                 {
-                    Debug.Log(i);
-                }
+                    HashSet<Vector2Int> dummy = await blaster.Execute(blastTileCoordinates);
+                    HashSet<Vector2Int> dummy2 = await columnSorter.Execute(dummy);
+
+                    foreach (var i in dummy2)
+                    {
+                        if (boardData.BoardDataDictionary[i] != null)
+                            boardData.BoardDataDictionary[i].MoveTo(boardData.BoardDataDictionary[i].TargetPosition);
+                        else
+                        {
+                            PlayTile playTile = playTilePool.GetPlayTile();
+                            boardData.SetTile(i, playTile);
+                            playTile.SetPosition(boardData.GetWorldPosition(i) + new Vector3(0f, 10f, 0f));
+                            playTile.MoveTo(boardData.GetWorldPosition(i));
+                        }
+                    }
+
+                    await Task.Delay(400);
+
+                    blastTileCoordinates = await matchChecker.Execute(dummy2);
+                }     
             }
         }
 

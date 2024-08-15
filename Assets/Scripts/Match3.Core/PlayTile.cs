@@ -11,6 +11,7 @@ namespace Match3.Core
     {
         public Action<PlayTile> Blasted;
         public int TileID { get; private set; }
+        public Vector3 TargetPosition { get; private set; }
         
         [Inject]private SpriteRenderer spriteRenderer;
 
@@ -30,9 +31,14 @@ namespace Match3.Core
             transform.position = position;
         }
 
+        public void SetTargetPosition(Vector3 targetPosition)
+        {
+            TargetPosition = targetPosition;
+        }
+
         public void MoveTo(Vector3 position)
         {
-            transform.DOMove(position, 0.2f).SetEase(Ease.InCubic);
+            transform.DOMove(position, 0.2f).SetEase(Ease.InQuad);
         }
     }
 

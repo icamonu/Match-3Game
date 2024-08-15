@@ -45,7 +45,7 @@ namespace Match3.Core
             int ptrBack = 0;
             int ptrFrw = 0;
 
-            HashSet<Vector2Int> emptyCoordinates = new HashSet<Vector2Int>();
+            HashSet<Vector2Int> effectedCoordinates = new HashSet<Vector2Int>();
 
             await Task.Run(() => {
                 while (boardData.BoardDataDictionary.ContainsKey(new Vector2Int(column, ptrBack)))
@@ -67,18 +67,21 @@ namespace Match3.Core
                         }
 
                         Vector3 targetPosition = boardData.GetWorldPosition(new Vector2Int(column, ptrBack));
-                        boardData.BoardDataDictionary[new Vector2Int(column, ptrFrw)].MoveTo(targetPosition);
+                        
                         boardData.SetTile(new Vector2Int(column, ptrBack), boardData.BoardDataDictionary[new Vector2Int(column, ptrFrw)]);
                         boardData.SetTile(new Vector2Int(column, ptrFrw), null);
+                        boardData.BoardDataDictionary[new Vector2Int(column, ptrBack)].SetTargetPosition(targetPosition);
+                        effectedCoordinates.Add(new Vector2Int(column, ptrBack));
+
                     }
                     else
                     {
-                        emptyCoordinates.Add(new Vector2Int(column, ptrBack));
+                        effectedCoordinates.Add(new Vector2Int(column, ptrBack));
                         ptrBack++;
                     }
                 }
             });
-            return emptyCoordinates;
+            return effectedCoordinates;
         }
     }
 }
