@@ -28,16 +28,21 @@ namespace Match3.Core
                 return;
 
             await Flip(tile1, tile2);
-            HashSet<Vector2Int> blastTileCoordinates = (HashSet<Vector2Int>)await matchChecker.Execute(new HashSet<Vector2Int>() { tile1, tile2 });
+            HashSet<Vector2Int> blastTileCoordinates = await matchChecker.Execute(new HashSet<Vector2Int>() { tile1, tile2 });
             if (blastTileCoordinates.Count == 0)
                 await Flip(tile1, tile2);
             else
             {
                 executionQueue.Enqueue(blaster);
-                await executionQueue.Dequeue().Execute(blastTileCoordinates);
+                HashSet<Vector2Int> dummy = await executionQueue.Dequeue().Execute(blastTileCoordinates);
 
                 executionQueue.Enqueue(columnSorter);
-                await executionQueue.Dequeue().Execute(blastTileCoordinates);
+                HashSet<Vector2Int> dummy2 = await executionQueue.Dequeue().Execute(dummy);
+
+                foreach(var i in dummy2)
+                {
+                    Debug.Log(i);
+                }
             }
         }
 
