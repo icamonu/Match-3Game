@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78e75c08f71ad48dd946eef8bc5c21c8, type: 3}
+  m_Name: ContainerTileLight
+  m_EditorClassIdentifier: 
+  tileID: 1
+  sprite: {fileID: 2109639921, guid: a422b408c8c8ce14d86d2a701bcddb7c, type: 3}
