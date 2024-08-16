@@ -15,7 +15,7 @@ namespace Match3.Core
 
         public void AddInputTile(InputTile inputTile)
         {
-            PlayTile playTile = playTilePool.GetPlayTile();
+            PlayTile playTile = playTilePool.GetPlayTile(ExludeTiles(inputTile.BoardPosition));
             boardData.SetTile(inputTile.BoardPosition, playTile);
 
             if (inputTile.BoardPosition == Vector2Int.one)
@@ -54,7 +54,6 @@ namespace Match3.Core
                     }
 
                     await Task.Delay(400);
-
                     blastTileCoordinates = await matchChecker.Execute(sortedCoordinates);
                 }     
             }
@@ -78,6 +77,32 @@ namespace Match3.Core
                 return false;
 
             return true;
+        }
+
+        List<int> ExludeTiles(Vector2Int boardPosition)
+        {
+            List<int> excludedTiles = new List<int>();
+
+            if (boardPosition.x > 1)
+            {
+                if (boardData.BoardDataDictionary[boardPosition + Vector2Int.left].TileID
+                     == boardData.BoardDataDictionary[boardPosition + 2 * Vector2Int.left].TileID)
+                {
+                    excludedTiles.Add(boardData.BoardDataDictionary[boardPosition + Vector2Int.left].TileID);
+                }
+            }
+
+            if (boardPosition.y > 1)
+            {
+                if (boardData.BoardDataDictionary[boardPosition + Vector2Int.down].TileID
+                    == boardData.BoardDataDictionary[boardPosition + 2 * Vector2Int.down].TileID)
+                {
+                    excludedTiles.Add(boardData.BoardDataDictionary[boardPosition + Vector2Int.down].TileID);
+                }
+            }
+
+
+            return excludedTiles;
         }
     }
 }

@@ -12,10 +12,10 @@ namespace Match3.Core
         Queue<PlayTile> deactivePlayTilesPool = new Queue<PlayTile>();
         [SerializeField] private List<PlayTileScriptableObject> playTileScriptableObjects;
 
-        public PlayTile GetPlayTile()
+        public PlayTile GetPlayTile(List<int> exludedTiles)
         {
             if (deactivePlayTilesPool.Count == 0)
-                CreateNewPlayTile();
+                CreateNewPlayTile(exludedTiles);
 
             PlayTile tile = deactivePlayTilesPool.Dequeue();
             tile.Blasted += OnBlasted;
@@ -23,10 +23,34 @@ namespace Match3.Core
             return tile;   
         }
 
-        PlayTile CreateNewPlayTile()
+        public PlayTile GetPlayTile()
+        {
+            if (deactivePlayTilesPool.Count == 0)
+                CreateNewPlayTile(new List<int>());
+
+            PlayTile tile = deactivePlayTilesPool.Dequeue();
+            tile.Blasted += OnBlasted;
+            activePlayTilesPool.Add(tile);
+            return tile;
+        }
+
+        PlayTile CreateNewPlayTile(List<int> exludedTiles)
         {
             PlayTile playTile = playTileFactory.Create();
-            PlayTileScriptableObject playTileSO = playTileScriptableObjects[UnityEngine.Random.Range(0, playTileScriptableObjects.Count)];
+
+            int rndNumber= Random.Range(0, playTileScriptableObjects.Count);
+
+            if (exludedTiles.Count != 0)
+            {
+                Debug.Log(exludedTiles[0]);
+            }
+
+            while (exludedTiles.Contains(rndNumber))
+            {
+                rndNumber = Random.Range(0, playTileScriptableObjects.Count);
+            }
+
+            PlayTileScriptableObject playTileSO = playTileScriptableObjects[rndNumber];
             playTile.Initialize(playTileSO.sprite, playTileSO.tileID);
             deactivePlayTilesPool.Enqueue(playTile);
             playTile.transform.SetParent(transform);

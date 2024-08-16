@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 53b0c0d2350e64d5e80d0af6c9604f78, type: 3}
-  m_Name: PlayTile7
+  m_Name: PlayTile0
   m_EditorClassIdentifier: 
-  sprite: {fileID: 21300000, guid: 140169fe467b8b649aa2541e0c8d6c09, type: 3}
-  tileID: 7
+  sprite: {fileID: 21300000, guid: b7481a4c424715542a70ac1efc7468db, type: 3}
+  tileID: 0

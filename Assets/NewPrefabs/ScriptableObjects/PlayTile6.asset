@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53b0c0d2350e64d5e80d0af6c9604f78, type: 3}
   m_Name: PlayTile6
   m_EditorClassIdentifier: 
-  sprite: {fileID: 21300000, guid: 50dd2e8acaa7426438d693e39eb73026, type: 3}
+  sprite: {fileID: 21300000, guid: 140169fe467b8b649aa2541e0c8d6c09, type: 3}
   tileID: 6
