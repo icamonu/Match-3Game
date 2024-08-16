@@ -11,8 +11,6 @@ namespace Match3.Core
 
         public async Task<HashSet<Vector2Int>> Execute(IEnumerable<Vector2Int> coordinates)
         {
-            Debug.Log("a");
-
             HashSet<int> columns = new HashSet<int>();
             HashSet<Vector2Int> emptyBoardCoordinates = new HashSet<Vector2Int>();
 
@@ -27,7 +25,6 @@ namespace Match3.Core
                tasks.Add(Sort(i));
             }
 
-            Debug.Log("b");
             var results = await Task.WhenAll(tasks);
 
             foreach (var result in results)
@@ -52,7 +49,6 @@ namespace Match3.Core
                 {
                     if (boardData.BoardDataDictionary[new Vector2Int(column, ptrBack)] != null)
                     {
-                        Debug.Log(ptrBack);
                         ptrBack++;
                         ptrFrw = ptrBack;
                         continue;

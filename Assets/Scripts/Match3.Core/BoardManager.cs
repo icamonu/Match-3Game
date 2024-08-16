@@ -13,8 +13,6 @@ namespace Match3.Core
         [Inject] PlayTilePool playTilePool;
         [Inject] Blaster blaster;
 
-        Queue<ICommand> executionQueue = new Queue<ICommand>();
-
         public void AddInputTile(InputTile inputTile)
         {
             PlayTile playTile = playTilePool.GetPlayTile();
@@ -39,10 +37,10 @@ namespace Match3.Core
             {
                 while (blastTileCoordinates.Count != 0)
                 {
-                    HashSet<Vector2Int> dummy = await blaster.Execute(blastTileCoordinates);
-                    HashSet<Vector2Int> dummy2 = await columnSorter.Execute(dummy);
+                    HashSet<Vector2Int> blastCoordinates = await blaster.Execute(blastTileCoordinates);
+                    HashSet<Vector2Int> sortedCoordinates = await columnSorter.Execute(blastCoordinates);
 
-                    foreach (var i in dummy2)
+                    foreach (var i in sortedCoordinates)
                     {
                         if (boardData.BoardDataDictionary[i] != null)
                             boardData.BoardDataDictionary[i].MoveTo(boardData.BoardDataDictionary[i].TargetPosition);
@@ -57,7 +55,7 @@ namespace Match3.Core
 
                     await Task.Delay(400);
 
-                    blastTileCoordinates = await matchChecker.Execute(dummy2);
+                    blastTileCoordinates = await matchChecker.Execute(sortedCoordinates);
                 }     
             }
         }
