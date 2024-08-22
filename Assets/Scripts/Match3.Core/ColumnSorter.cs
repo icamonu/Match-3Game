@@ -5,7 +5,7 @@ using Zenject;
 
 namespace Match3.Core
 {
-    public class ColumnSorter: ICommand
+    public class ColumnSorter
     {
         [Inject] BoardData boardData;
 
@@ -45,18 +45,18 @@ namespace Match3.Core
             HashSet<Vector2Int> effectedCoordinates = new HashSet<Vector2Int>();
 
             await Task.Run(() => {
-                while (boardData.BoardDataDictionary.ContainsKey(new Vector2Int(column, ptrBack)))
+                while (boardData.boardDataDictionary.ContainsKey(new Vector2Int(column, ptrBack)))
                 {
-                    if (boardData.BoardDataDictionary[new Vector2Int(column, ptrBack)] != null)
+                    if (boardData.boardDataDictionary[new Vector2Int(column, ptrBack)] != null)
                     {
                         ptrBack++;
                         ptrFrw = ptrBack;
                         continue;
                     }
 
-                    if(boardData.BoardDataDictionary.ContainsKey(new Vector2Int(column, ptrFrw)))
+                    if(boardData.boardDataDictionary.ContainsKey(new Vector2Int(column, ptrFrw)))
                     {
-                        if(boardData.BoardDataDictionary[new Vector2Int(column, ptrFrw)] == null)
+                        if(boardData.boardDataDictionary[new Vector2Int(column, ptrFrw)] == null)
                         {
                             ptrFrw++;
                             continue;
@@ -64,9 +64,9 @@ namespace Match3.Core
 
                         Vector3 targetPosition = boardData.GetWorldPosition(new Vector2Int(column, ptrBack));
                         
-                        boardData.SetTile(new Vector2Int(column, ptrBack), boardData.BoardDataDictionary[new Vector2Int(column, ptrFrw)]);
+                        boardData.SetTile(new Vector2Int(column, ptrBack), boardData.boardDataDictionary[new Vector2Int(column, ptrFrw)]);
                         boardData.SetTile(new Vector2Int(column, ptrFrw), null);
-                        boardData.BoardDataDictionary[new Vector2Int(column, ptrBack)].SetTargetPosition(targetPosition);
+                        boardData.boardDataDictionary[new Vector2Int(column, ptrBack)].SetTargetPosition(targetPosition);
                         effectedCoordinates.Add(new Vector2Int(column, ptrBack));
 
                     }

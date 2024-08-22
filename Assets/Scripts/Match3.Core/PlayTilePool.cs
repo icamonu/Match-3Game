@@ -40,11 +40,6 @@ namespace Match3.Core
 
             int rndNumber= Random.Range(0, playTileScriptableObjects.Count);
 
-            if (exludedTiles.Count != 0)
-            {
-                Debug.Log(exludedTiles[0]);
-            }
-
             while (exludedTiles.Contains(rndNumber))
             {
                 rndNumber = Random.Range(0, playTileScriptableObjects.Count);
@@ -64,4 +59,3 @@ namespace Match3.Core
         }
     }
 }
-

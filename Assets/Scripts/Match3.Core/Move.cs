@@ -8,7 +8,6 @@ namespace Match3.Core
     public class Move : MonoBehaviour
     {
         [Inject] InputTile inputTile;
-        [Inject] BoardManager boardManager;
         bool isTouching;
         Vector3 startPoint;
 
@@ -36,8 +35,7 @@ namespace Match3.Core
             int directionAxisY = Mathf.Abs(direction.y) > Mathf.Abs(direction.x) ? (int)Mathf.Sign(direction.y) : 0;
 
             Vector2Int directionInt = new Vector2Int(directionAxisX, directionAxisY);
-
-            boardManager.FlipMove(inputTile.BoardPosition, inputTile.BoardPosition + directionInt);
+            inputTile.Move(directionInt);
 
             isTouching = false;
         }

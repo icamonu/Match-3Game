@@ -28,5 +28,10 @@ namespace Match3.Core
             spriteRenderer.sprite = sprite;
         }
 
+        public void Move(Vector2Int direction)
+        {
+            boardManager.FlipMove(BoardPosition, BoardPosition + direction);
+        }
+
     }
 }

@@ -1,25 +1,24 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using Zenject;
 
 namespace Match3.Core
 {
-    public class Blaster : ICommand
+    public class Blaster
     {
-        [Inject] BoardData boardData;
-
-        public async Task<HashSet<Vector2Int>> Execute(IEnumerable<Vector2Int> coordinates)
+        public async Task<HashSet<Vector2Int>> Execute(IEnumerable<Vector2Int> coordinates, Dictionary<Vector2Int, PlayTile> boardDataDictionary)
         {
+            HashSet<Vector2Int> blastedCoordinates=new HashSet<Vector2Int>();
+
             foreach (Vector2Int i in coordinates)
             {
-                boardData.GetTileData(i).gameObject.SetActive(false);
-                boardData.SetTile(i, null);
+                boardDataDictionary[i].gameObject.SetActive(false);
+                blastedCoordinates.Add(i);
             }
 
             await Task.Delay(1);
 
-            return (HashSet<Vector2Int>)coordinates;
+            return blastedCoordinates;
         }
     }
 }

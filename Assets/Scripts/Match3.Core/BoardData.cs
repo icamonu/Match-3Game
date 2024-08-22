@@ -5,27 +5,26 @@ namespace Match3.Core
 {
     public class BoardData
     {
-        private Dictionary<Vector2Int, PlayTile> boardData = new Dictionary<Vector2Int, PlayTile>();  //Stores board positions and tile types (as integers)
-        public IReadOnlyDictionary<Vector2Int, PlayTile> BoardDataDictionary { get { return boardData; } }
+        public Dictionary<Vector2Int, PlayTile> boardDataDictionary = new Dictionary<Vector2Int, PlayTile>();  //Stores board positions and tile types
 
         Vector3 offset;
 
         public void SetTile(Vector2Int boardPosition, PlayTile playTile)
         {
-            boardData[boardPosition] = playTile;
+            boardDataDictionary[boardPosition] = playTile;
         }
 
         public void SetOffset()
         {
-            offset = boardData[Vector2Int.zero].transform.position;
+            offset = boardDataDictionary[Vector2Int.zero].transform.position;
         }
 
         public PlayTile GetTileData(Vector2Int boardPosition)
         {
-            if (!boardData.ContainsKey(boardPosition))
+            if (!boardDataDictionary.ContainsKey(boardPosition))
                 return null;
 
-            return boardData[boardPosition];
+            return boardDataDictionary[boardPosition];
         }
 
         public Vector3 GetWorldPosition(Vector2Int boardPosition)

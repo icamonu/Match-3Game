@@ -30,20 +30,24 @@ namespace Match3.Core
                 return;
 
             await Flip(tile1, tile2);
-            HashSet<Vector2Int> blastTileCoordinates = await matchChecker.Execute(new HashSet<Vector2Int>() { tile1, tile2 });
+            HashSet<Vector2Int> blastTileCoordinates = await matchChecker.Execute(new HashSet<Vector2Int>() { tile1, tile2 }, boardData.boardDataDictionary);
             if (blastTileCoordinates.Count == 0)
                 await Flip(tile1, tile2);
             else
             {
                 while (blastTileCoordinates.Count != 0)
                 {
-                    HashSet<Vector2Int> blastCoordinates = await blaster.Execute(blastTileCoordinates);
+                    HashSet<Vector2Int> blastCoordinates = await blaster.Execute(blastTileCoordinates, boardData.boardDataDictionary);
+
+                    foreach(Vector2Int c in blastCoordinates)
+                        boardData.SetTile(c, null);
+
                     HashSet<Vector2Int> sortedCoordinates = await columnSorter.Execute(blastCoordinates);
 
                     foreach (var i in sortedCoordinates)
                     {
-                        if (boardData.BoardDataDictionary[i] != null)
-                            boardData.BoardDataDictionary[i].MoveTo(boardData.BoardDataDictionary[i].TargetPosition);
+                        if (boardData.boardDataDictionary[i] != null)
+                            boardData.boardDataDictionary[i].MoveTo(boardData.boardDataDictionary[i].TargetPosition);
                         else
                         {
                             PlayTile playTile = playTilePool.GetPlayTile();
@@ -54,7 +58,7 @@ namespace Match3.Core
                     }
 
                     await Task.Delay(400);
-                    blastTileCoordinates = await matchChecker.Execute(sortedCoordinates);
+                    blastTileCoordinates = await matchChecker.Execute(sortedCoordinates, boardData.boardDataDictionary);
                 }     
             }
         }
@@ -85,22 +89,21 @@ namespace Match3.Core
 
             if (boardPosition.x > 1)
             {
-                if (boardData.BoardDataDictionary[boardPosition + Vector2Int.left].TileID
-                     == boardData.BoardDataDictionary[boardPosition + 2 * Vector2Int.left].TileID)
+                if (boardData.boardDataDictionary[boardPosition + Vector2Int.left].TileID
+                     == boardData.boardDataDictionary[boardPosition + 2 * Vector2Int.left].TileID)
                 {
-                    excludedTiles.Add(boardData.BoardDataDictionary[boardPosition + Vector2Int.left].TileID);
+                    excludedTiles.Add(boardData.boardDataDictionary[boardPosition + Vector2Int.left].TileID);
                 }
             }
 
             if (boardPosition.y > 1)
             {
-                if (boardData.BoardDataDictionary[boardPosition + Vector2Int.down].TileID
-                    == boardData.BoardDataDictionary[boardPosition + 2 * Vector2Int.down].TileID)
+                if (boardData.boardDataDictionary[boardPosition + Vector2Int.down].TileID
+                    == boardData.boardDataDictionary[boardPosition + 2 * Vector2Int.down].TileID)
                 {
-                    excludedTiles.Add(boardData.BoardDataDictionary[boardPosition + Vector2Int.down].TileID);
+                    excludedTiles.Add(boardData.boardDataDictionary[boardPosition + Vector2Int.down].TileID);
                 }
             }
-
 
             return excludedTiles;
         }
